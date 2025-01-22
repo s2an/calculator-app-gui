@@ -2,7 +2,9 @@ import org.junit.Test;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
-import static org.junit.Assert.assertEquals;
+// import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 
 public class CalculatorAppConsoleTest {
 
@@ -19,7 +21,9 @@ public class CalculatorAppConsoleTest {
 
             // Assert: Verify the output contains the welcome message
             String output = outputStream.toString().trim();
-            assertEquals("Welcome to the Calculator App!", output);
+            assertTrue(output.contains("Welcome to the Calculator App!"));
+            assertTrue(output.contains("Available operations: +, -, *, /"));
+            assertTrue(output.contains("Type '!!!' to quit."));
         } finally {
             // Cleanup: Restore the original System.out
             System.setOut(originalOut);
