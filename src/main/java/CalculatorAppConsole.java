@@ -18,4 +18,18 @@ public class CalculatorAppConsole {
 
         return scanner.nextInt();
     }
+
+    public static char handleOperatorInput() {
+        Scanner scanner = new Scanner(System.in);
+        char operator;
+
+        while (true) {
+            operator = scanner.next().charAt(0);
+            if (operator == '+' || operator == '-' || operator == '*' || operator == '/') {
+                return operator;
+            } else {
+                System.out.println("Invalid operator.");
+            }
+        }
+    }
 }

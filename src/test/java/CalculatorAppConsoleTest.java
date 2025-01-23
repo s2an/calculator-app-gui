@@ -43,4 +43,45 @@ public class CalculatorAppConsoleTest {
             System.setIn(System.in);
         }
     }
+
+    @Test
+    public void testValidOperatorInput() {
+        char[] validOperators = {'+', '-', '*', '/'};
+
+        for (char operator : validOperators) {
+            String simulatedInput = operator + "\n";
+            ByteArrayInputStream inputStream = new ByteArrayInputStream(simulatedInput.getBytes());
+            System.setIn(inputStream);
+
+            char result = CalculatorAppConsole.handleOperatorInput();
+
+            assertTrue(result == '+' || result == '-' || result == '*' || result == '/');
+
+            // Cleanup: Restore System.in
+            System.setIn(System.in);
+        }
+    }
+
+    @Test
+    public void testInvalidOperatorInput() {
+        String simulatedInput = "q\n+\n"; // Needs a valid input after an invalid one. Else the scanner causes it to throw a NoSuchElementException.
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(simulatedInput.getBytes());
+        System.setIn(inputStream);
+
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        PrintStream originalOut = System.out;
+        System.setOut(new PrintStream(outputStream));
+
+        try {
+            char result = CalculatorAppConsole.handleOperatorInput();
+
+            assertEquals('+', result);
+            String output = outputStream.toString().trim();
+            assertTrue(output.contains("Invalid operator."));
+        } finally {
+            System.setIn(System.in);
+            System.setOut(originalOut);
+        }
+    }
 }
+
