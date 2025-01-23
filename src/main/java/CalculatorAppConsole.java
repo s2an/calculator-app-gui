@@ -35,11 +35,17 @@ public class CalculatorAppConsole {
     }
 
     public static int handleNumberInput(Scanner scanner) {
-        String input = scanner.next();
-        if (input.equals("!!!")) {
-            throw new ExitException();
+        while (true) {
+            String input = scanner.next();
+            if (input.equals("!!!")) {
+                throw new ExitException();
+            }
+
+            if (input.matches("\\d+")) {
+                return Integer.parseInt(input);
+            }
+            System.out.println("Invalid number.");
         }
-        return Integer.parseInt(input);
     }
 
 

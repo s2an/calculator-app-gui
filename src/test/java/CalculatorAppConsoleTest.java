@@ -33,7 +33,7 @@ public class CalculatorAppConsoleTest {
     }
 
     @Test
-    public void testNumberInput() {
+    public void testValidNumberInput() {
         String simulatedInput = "4\n"; // Simulates entering the number 4 and pressing Enter
         ByteArrayInputStream inputStream = new ByteArrayInputStream(simulatedInput.getBytes());
         System.setIn(inputStream);
@@ -45,6 +45,30 @@ public class CalculatorAppConsoleTest {
             assertEquals(4, result);
         } finally {
             System.setIn(System.in);
+        }
+    }
+
+    @Test
+    public void testInvalidNumberInput() {
+        String simulatedInput = "q\n1\n";
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(simulatedInput.getBytes());
+        System.setIn(inputStream);
+
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        PrintStream originalOut = System.out;
+        System.setOut(new PrintStream(outputStream));
+
+        Scanner scanner = new Scanner(System.in);
+
+        try {
+            int result = CalculatorAppConsole.handleNumberInput(scanner);
+
+            assertEquals(1, result);
+            String output = outputStream.toString().trim();
+            assertTrue(output.contains("Invalid number."));
+        } finally {
+            System.setIn(System.in);
+            System.setOut(originalOut);
         }
     }
 
