@@ -37,7 +37,7 @@ public class CalculatorAppConsoleTest {
         System.setIn(inputStream);
 
         try {
-            int result = CalculatorAppConsole.handleInput();
+            int result = CalculatorAppConsole.handleNumberInput();
             assertEquals(4, result);
         } finally {
             System.setIn(System.in);

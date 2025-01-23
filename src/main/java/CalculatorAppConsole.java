@@ -4,7 +4,7 @@ import java.util.Scanner;
 public class CalculatorAppConsole {
     public static void main(String[] args) {
         printWelcomeMessage();
-        handleInput();
+        handleNumberInput();
     }
 
     public static void printWelcomeMessage() {
@@ -13,7 +13,7 @@ public class CalculatorAppConsole {
         System.out.println("Type '!!!' to quit.");
     }
 
-    public static int handleInput() {
+    public static int handleNumberInput() {
         Scanner scanner = new Scanner(System.in);
 
         return scanner.nextInt();
