@@ -2,6 +2,7 @@ import org.junit.Test;
 import java.io.ByteArrayOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.PrintStream;
+import java.util.Scanner;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -36,8 +37,10 @@ public class CalculatorAppConsoleTest {
         ByteArrayInputStream inputStream = new ByteArrayInputStream(simulatedInput.getBytes());
         System.setIn(inputStream);
 
+        Scanner scanner = new Scanner(System.in);
+
         try {
-            int result = CalculatorAppConsole.handleNumberInput();
+            int result = CalculatorAppConsole.handleNumberInput(scanner);
             assertEquals(4, result);
         } finally {
             System.setIn(System.in);
@@ -53,7 +56,9 @@ public class CalculatorAppConsoleTest {
             ByteArrayInputStream inputStream = new ByteArrayInputStream(simulatedInput.getBytes());
             System.setIn(inputStream);
 
-            char result = CalculatorAppConsole.handleOperatorInput();
+            Scanner scanner = new Scanner(System.in);
+
+            char result = CalculatorAppConsole.handleOperatorInput(scanner);
 
             assertTrue(result == '+' || result == '-' || result == '*' || result == '/');
 
@@ -72,8 +77,10 @@ public class CalculatorAppConsoleTest {
         PrintStream originalOut = System.out;
         System.setOut(new PrintStream(outputStream));
 
+        Scanner scanner = new Scanner(System.in);
+
         try {
-            char result = CalculatorAppConsole.handleOperatorInput();
+            char result = CalculatorAppConsole.handleOperatorInput(scanner);
 
             assertEquals('+', result);
             String output = outputStream.toString().trim();
@@ -83,5 +90,25 @@ public class CalculatorAppConsoleTest {
             System.setOut(originalOut);
         }
     }
-}
 
+    @Test
+    public void testCalculation() {
+        String simulatedInput = "5\n+\n3\n";
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(simulatedInput.getBytes());
+        System.setIn(inputStream);
+
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        PrintStream originalOut = System.out;
+        System.setOut(new PrintStream(outputStream));
+
+        try {
+            CalculatorAppConsole.main(new String[]{});
+
+            String output = outputStream.toString().trim();
+            assertTrue(output.contains("8"));
+        } finally {
+            System.setIn(System.in);
+            System.setOut(originalOut);
+        }
+    }
+}
