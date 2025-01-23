@@ -1,8 +1,9 @@
 import org.junit.Test;
 import java.io.ByteArrayOutputStream;
+import java.io.ByteArrayInputStream;
 import java.io.PrintStream;
 
-// import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 
@@ -17,8 +18,7 @@ public class CalculatorAppConsoleTest {
 
         try {
             // Act: Run the main method
-            CalculatorAppConsole.main(new String[]{});
-
+            CalculatorAppConsole.printWelcomeMessage();
             // Assert: Verify the output contains the welcome message
             String output = outputStream.toString().trim();
             assertTrue(output.contains("Welcome to the Calculator App!"));
@@ -27,6 +27,20 @@ public class CalculatorAppConsoleTest {
         } finally {
             // Cleanup: Restore the original System.out
             System.setOut(originalOut);
+        }
+    }
+
+    @Test
+    public void testNumberInput() {
+        String simulatedInput = "4\n"; // Simulates entering the number 4 and pressing Enter
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(simulatedInput.getBytes());
+        System.setIn(inputStream);
+
+        try {
+            int result = CalculatorAppConsole.handleInput();
+            assertEquals(4, result);
+        } finally {
+            System.setIn(System.in);
         }
     }
 }
