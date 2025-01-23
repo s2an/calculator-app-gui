@@ -1,8 +1,22 @@
 import java.util.Scanner;
 
-
 public class CalculatorAppConsole {
     public static void main(String[] args) {
+        try {
+            runCalculator();
+        } catch (ExitException e) {
+            System.out.println("Exiting the calculator. Goodbye!");
+        }
+    }
+
+    // Error handling for exiting the program
+    public static class ExitException extends RuntimeException {
+        public ExitException() {
+            super("User chose to exit the program.");
+        }
+    }
+
+    public static void runCalculator() {
         printWelcomeMessage();
 
         Scanner scanner = new Scanner(System.in);
@@ -21,19 +35,26 @@ public class CalculatorAppConsole {
     }
 
     public static int handleNumberInput(Scanner scanner) {
-        return scanner.nextInt();
+        String input = scanner.next();
+        if (input.equals("!!!")) {
+            throw new ExitException();
+        }
+        return Integer.parseInt(input);
     }
 
-    public static char handleOperatorInput(Scanner scanner) {
-        char operator;
 
+    public static char handleOperatorInput(Scanner scanner) {
         while (true) {
-            operator = scanner.next().charAt(0);
-            if (operator == '+' || operator == '-' || operator == '*' || operator == '/') {
-                return operator;
-            } else {
-                System.out.println("Invalid operator.");
+            String input = scanner.next();
+
+            if (input.equals("!!!")) {
+                throw new ExitException();
             }
+
+            if (input.equals("+") || input.equals("-") || input.equals("*") || input.equals("/")) {
+                return input.charAt(0);
+            }
+            System.out.println("Invalid operator.");
         }
     }
 

@@ -6,6 +6,7 @@ import java.util.Scanner;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 
 public class CalculatorAppConsoleTest {
@@ -124,12 +125,41 @@ public class CalculatorAppConsoleTest {
 
         try {
             CalculatorAppConsole.main(new String[]{});
+            fail("Expected ArithmeticException was not thrown.");
 
-            String output = outputStream.toString().trim();
-            assertTrue(output.contains("Cannot divide by zero."));
+        } catch (ArithmeticException e) {
+            assertEquals("Cannot divide by zero.", e.getMessage());
         } finally {
             System.setIn(System.in);
             System.setOut(originalOut);
+        }
+    }
+
+    @Test
+    public void testExitDuringNumberInput() {
+        String simulatedInput = "!!!\n";
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(simulatedInput.getBytes());
+        System.setIn(inputStream);
+
+        try {
+            CalculatorAppConsole.handleNumberInput(new Scanner(System.in));
+            fail("ExitException was not thrown.");
+        } catch (CalculatorAppConsole.ExitException e) {
+            assertEquals("User chose to exit the program.", e.getMessage());
+        }
+    }
+
+    @Test
+    public void testExitDuringOperatorInput() {
+        String simulatedInput = "!!!\n";
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(simulatedInput.getBytes());
+        System.setIn(inputStream);
+
+        try {
+            CalculatorAppConsole.handleOperatorInput(new Scanner(System.in));
+            fail("ExitException was not thrown.");
+        } catch (CalculatorAppConsole.ExitException e) {
+            assertEquals("User chose to exit the program.", e.getMessage());
         }
     }
 }
