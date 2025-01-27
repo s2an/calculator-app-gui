@@ -91,7 +91,7 @@ public class CalculatorAppConsoleTest {
 
     @Test
     public void testInvalidNegativeNumberInput() {
-        String simulatedInput = "-a\n5\n"; // Invaild input, then valid input
+        String simulatedInput = "-a\n5\n"; // Invalid input, then valid input
         ByteArrayInputStream inputStream = new ByteArrayInputStream(simulatedInput.getBytes());
         System.setIn(inputStream);
 
@@ -252,6 +252,27 @@ public class CalculatorAppConsoleTest {
 
             String output = outputStream.toString().trim();
             assertTrue(output.contains("8.75"));
+        } finally {
+            System.setIn(System.in);
+            System.setOut(originalOut);
+        }
+    }
+
+    @Test
+    public void testMultipleCalculations() {
+        String simulatedInput = "5\n+\n3\n-\n7\n";
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(simulatedInput.getBytes());
+        System.setIn(inputStream);
+
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        PrintStream originalOut = System.out;
+        System.setOut(new PrintStream(outputStream));
+
+        try {
+            CalculatorAppConsole.main(new String[]{});
+
+            String output = outputStream.toString().trim();
+            assertTrue(output.contains("1"));
         } finally {
             System.setIn(System.in);
             System.setOut(originalOut);
