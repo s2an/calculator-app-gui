@@ -115,6 +115,23 @@ public class CalculatorAppConsoleTest {
     }
 
     @Test
+    public void testValidFloatingPointNumberInput() {
+        String simulatedInput = "5.75\n";
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(simulatedInput.getBytes());
+        System.setIn(inputStream);
+
+        Scanner scanner = new Scanner(System.in);
+
+        try {
+            double result = CalculatorAppConsole.handleNumberInput(scanner);
+
+            assertEquals(5.75, result, 0.0001);
+        } finally {
+            System.setIn(System.in);
+        }
+    }
+
+    @Test
     public void testValidOperatorInput() {
         char[] validOperators = {'+', '-', '*', '/'};
 
@@ -126,10 +143,8 @@ public class CalculatorAppConsoleTest {
             Scanner scanner = new Scanner(System.in);
 
             char result = CalculatorAppConsole.handleOperatorInput(scanner);
-
             assertTrue(result == '+' || result == '-' || result == '*' || result == '/');
 
-            // Cleanup: Restore System.in
             System.setIn(System.in);
         }
     }
@@ -216,6 +231,27 @@ public class CalculatorAppConsoleTest {
 
             String output = outputStream.toString().trim();
             assertTrue(output.contains("-8"));
+        } finally {
+            System.setIn(System.in);
+            System.setOut(originalOut);
+        }
+    }
+
+    @Test
+    public void testFloatingPointCalculation() {
+        String simulatedInput = "5.5\n+\n3.25\n";
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(simulatedInput.getBytes());
+        System.setIn(inputStream);
+
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        PrintStream originalOut = System.out;
+        System.setOut(new PrintStream(outputStream));
+
+        try {
+            CalculatorAppConsole.main(new String[]{});
+
+            String output = outputStream.toString().trim();
+            assertTrue(output.contains("8.75"));
         } finally {
             System.setIn(System.in);
             System.setOut(originalOut);

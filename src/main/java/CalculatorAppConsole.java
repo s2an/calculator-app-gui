@@ -41,8 +41,8 @@ public class CalculatorAppConsole {
                 throw new ExitException();
             }
 
-            if (input.matches("-?\\d+")) {
-                return Integer.parseInt(input);
+            if (input.matches("-?\\d+(\\.\\d+)?")) {
+                return Double.parseDouble(input);
             }
             System.out.println("Invalid number.");
         }
