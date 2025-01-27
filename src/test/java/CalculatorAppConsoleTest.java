@@ -175,7 +175,7 @@ public class CalculatorAppConsoleTest {
 
     @Test
     public void testCalculation() {
-        String simulatedInput = "5\n+\n3\n";
+        String simulatedInput = "5\n+\n3\n!!!\n";
         ByteArrayInputStream inputStream = new ByteArrayInputStream(simulatedInput.getBytes());
         System.setIn(inputStream);
 
@@ -218,7 +218,7 @@ public class CalculatorAppConsoleTest {
 
     @Test
     public void testNegativeNumberCalculation() {
-        String simulatedInput = "-5\n+\n-3\n";
+        String simulatedInput = "-5\n+\n-3\n!!!\n";
         ByteArrayInputStream inputStream = new ByteArrayInputStream(simulatedInput.getBytes());
         System.setIn(inputStream);
 
@@ -239,7 +239,7 @@ public class CalculatorAppConsoleTest {
 
     @Test
     public void testFloatingPointCalculation() {
-        String simulatedInput = "5.5\n+\n3.25\n";
+        String simulatedInput = "5.5\n+\n3.25\n!!!\n";
         ByteArrayInputStream inputStream = new ByteArrayInputStream(simulatedInput.getBytes());
         System.setIn(inputStream);
 
@@ -260,7 +260,7 @@ public class CalculatorAppConsoleTest {
 
     @Test
     public void testMultipleCalculations() {
-        String simulatedInput = "5\n+\n3\n-\n7\n";
+        String simulatedInput = "5\n+\n3\n-\n7\n!!!\n";
         ByteArrayInputStream inputStream = new ByteArrayInputStream(simulatedInput.getBytes());
         System.setIn(inputStream);
 
@@ -273,6 +273,7 @@ public class CalculatorAppConsoleTest {
 
             String output = outputStream.toString().trim();
             assertTrue(output.contains("1"));
+
         } finally {
             System.setIn(System.in);
             System.setOut(originalOut);

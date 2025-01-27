@@ -20,12 +20,27 @@ public class CalculatorAppConsole {
         printWelcomeMessage();
 
         Scanner scanner = new Scanner(System.in);
+        double num1 = 0; // Initialize num1 to store the result
+        boolean isFirstIteration = true;
 
-        double num1 = handleNumberInput(scanner);
-        char operator = handleOperatorInput(scanner);
-        double num2 = handleNumberInput(scanner);
-        double result = performCalculation(num1, num2, operator);
-        System.out.println(result);
+
+        while (true) {
+            try {
+                if (isFirstIteration) {
+                    num1 = handleNumberInput(scanner);
+                    isFirstIteration = false;
+                }
+
+                char operator = handleOperatorInput(scanner);
+                double num2 = handleNumberInput(scanner);
+
+                num1 = performCalculation(num1, num2, operator);
+                System.out.println(num1);
+            } catch (ExitException e) {
+                System.out.println(e.getMessage());
+                break;
+            }
+        }
     }
 
     public static void printWelcomeMessage() {
