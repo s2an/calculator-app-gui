@@ -41,8 +41,8 @@ public class CalculatorAppConsoleTest {
         Scanner scanner = new Scanner(System.in);
 
         try {
-            int result = CalculatorAppConsole.handleNumberInput(scanner);
-            assertEquals(4, result);
+            double result = CalculatorAppConsole.handleNumberInput(scanner);
+            assertEquals(4.0, result, 0.0001); // The delta is needed to account for a margin of error b/c java stores the numbers as binary approximations!
         } finally {
             System.setIn(System.in);
         }
@@ -61,9 +61,9 @@ public class CalculatorAppConsoleTest {
         Scanner scanner = new Scanner(System.in);
 
         try {
-            int result = CalculatorAppConsole.handleNumberInput(scanner);
+            double result = CalculatorAppConsole.handleNumberInput(scanner);
 
-            assertEquals(1, result);
+            assertEquals(1, result, 0.0001);
             String output = outputStream.toString().trim();
             assertTrue(output.contains("Invalid number."));
         } finally {
@@ -81,9 +81,9 @@ public class CalculatorAppConsoleTest {
         Scanner scanner = new Scanner(System.in);
 
         try {
-            int result = CalculatorAppConsole.handleNumberInput(scanner);
+            double result = CalculatorAppConsole.handleNumberInput(scanner);
 
-            assertEquals(-5, result);
+            assertEquals(-5, result, 0.0001);
         } finally {
             System.setIn(System.in);
         }
@@ -102,9 +102,9 @@ public class CalculatorAppConsoleTest {
         Scanner scanner = new Scanner(System.in);
 
         try {
-            int result = CalculatorAppConsole.handleNumberInput(scanner);
+            double result = CalculatorAppConsole.handleNumberInput(scanner);
 
-            assertEquals(5, result);
+            assertEquals(5, result, 0.0001);
 
             String output = outputStream.toString().trim();
             assertTrue(output.contains("Invalid number."));

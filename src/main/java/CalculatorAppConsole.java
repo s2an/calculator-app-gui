@@ -21,10 +21,10 @@ public class CalculatorAppConsole {
 
         Scanner scanner = new Scanner(System.in);
 
-        int num1 = handleNumberInput(scanner);
+        double num1 = handleNumberInput(scanner);
         char operator = handleOperatorInput(scanner);
-        int num2 = handleNumberInput(scanner);
-        int result = performCalculation(num1, num2, operator);
+        double num2 = handleNumberInput(scanner);
+        double result = performCalculation(num1, num2, operator);
         System.out.println(result);
     }
 
@@ -34,7 +34,7 @@ public class CalculatorAppConsole {
         System.out.println("Type '!!!' to quit.");
     }
 
-    public static int handleNumberInput(Scanner scanner) {
+    public static double handleNumberInput(Scanner scanner) {
         while (true) {
             String input = scanner.next();
             if (input.equals("!!!")) {
@@ -64,7 +64,7 @@ public class CalculatorAppConsole {
         }
     }
 
-    public static int performCalculation(int num1, int num2, char operator) {
+    public static double performCalculation(double num1, double num2, char operator) {
         switch (operator) {
             case '+':
                 return num1 + num2;
