@@ -36,6 +36,13 @@ public class CalculatorAppConsole {
         while (iterations < iterationLimit) {
 
             char operator = handleOperatorInput(scanner);
+
+            if (operator == 'C') { // Handle "clear"
+                num1 = 0;
+                System.out.println("Results cleared!");
+                continue; // Skip to the next iteration to allow a new number input
+            }
+
             double num2 = handleNumberInput(scanner);
 
             if (Double.isNaN(num2)) {
@@ -83,6 +90,10 @@ public class CalculatorAppConsole {
                 throw new ExitException();
             }
 
+            if (input.equalsIgnoreCase("clear")) {
+                return 'C';
+            }
+
             if (input.equals("+") || input.equals("-") || input.equals("*") || input.equals("/")) {
                 return input.charAt(0);
             }
@@ -104,6 +115,8 @@ public class CalculatorAppConsole {
                 } else {
                     throw new ArithmeticException("Cannot divide by zero.");
                 }
+            case 'C':
+                return 0; // This might not be the best way to apply the logic
             default:
                 throw new IllegalArgumentException("Unknown operator: " + operator);
         }

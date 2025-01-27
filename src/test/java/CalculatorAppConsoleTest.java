@@ -133,7 +133,7 @@ public class CalculatorAppConsoleTest {
     }
 
     @Test
-    public void testClearNumberInput1() {
+    public void testClearInNumberInput1() {
         String simulatedInput = "clear\n";
         ByteArrayInputStream inputStream = new ByteArrayInputStream(simulatedInput.getBytes());
         System.setIn(inputStream);
@@ -149,7 +149,7 @@ public class CalculatorAppConsoleTest {
     }
 
     @Test
-    public void testClearNumberInput2() {
+    public void testClearInNumberInput2() {
         String simulatedInput = "4\n+\nclear\n1\n+\n1\n";
         ByteArrayInputStream inputStream = new ByteArrayInputStream(simulatedInput.getBytes());
         System.setIn(inputStream);
@@ -164,6 +164,10 @@ public class CalculatorAppConsoleTest {
 
             String output = outputStream.toString();
             assertTrue(output.contains("Results cleared!"));
+            //assertTrue(output.contains("2"));
+            //not calculating correctly after the clear. make separate test
+            assertEquals("2", output);
+
         } finally {
             System.setIn(System.in);
             System.setOut(System.out);
@@ -210,6 +214,22 @@ public class CalculatorAppConsoleTest {
         } finally {
             System.setIn(System.in);
             System.setOut(originalOut);
+        }
+    }
+
+    @Test
+    public void testClearInOperatorInput() {
+        String simulatedInput = "4\nclear\n";
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(simulatedInput.getBytes());
+        System.setIn(inputStream);
+
+        Scanner scanner = new Scanner(System.in);
+// Currently passes, but also outputs "Invalid operator"
+        try {
+            char result = CalculatorAppConsole.handleOperatorInput(scanner);
+            assertEquals('C', result);
+        } finally {
+            System.setIn(System.in);
         }
     }
 
@@ -328,6 +348,31 @@ public class CalculatorAppConsoleTest {
         } finally {
             System.setIn(System.in);
             System.setOut(originalOut);
+        }
+    }
+
+    @Test
+    public void testClearInCalculations() {
+        String simulatedInput = "4\n+\nclear\n1\nclear\n2\n+\n1000\n";
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(simulatedInput.getBytes());
+        System.setIn(inputStream);
+
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(outputStream));
+
+        Scanner scanner = new Scanner(System.in);
+
+        try {
+            CalculatorAppConsole.processCalculations(scanner, 5);
+
+            String output = outputStream.toString();
+            assertTrue(output.contains("Results cleared!"));
+            //need to figure out why the other clear isnt calculating correctly
+            assertEquals("1002", output);
+            assertTrue(output.contains("1002.0"));
+        } finally {
+            System.setIn(System.in);
+            System.setOut(System.out);
         }
     }
 
