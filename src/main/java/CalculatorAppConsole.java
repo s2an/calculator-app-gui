@@ -20,26 +20,27 @@ public class CalculatorAppConsole {
         printWelcomeMessage();
 
         Scanner scanner = new Scanner(System.in);
-        double num1 = 0; // Initialize num1 to store the result
-        boolean isFirstIteration = true;
 
+        try {
+            processCalculations(scanner, 256000);
+        } catch (ExitException e) {
+            System.out.println(e.getMessage());
+        }
+    }
 
-        while (true) {
-            try {
-                if (isFirstIteration) {
-                    num1 = handleNumberInput(scanner);
-                    isFirstIteration = false;
-                }
+    public static void processCalculations(Scanner scanner, int iterationLimit) {
+        double num1 = handleNumberInput(scanner);
+        // Need to limit iterations so tests do have an infinite loop
+        int iterations = 0;
 
-                char operator = handleOperatorInput(scanner);
-                double num2 = handleNumberInput(scanner);
+        while (iterations < iterationLimit) {
+            char operator = handleOperatorInput(scanner);
+            double num2 = handleNumberInput(scanner);
 
-                num1 = performCalculation(num1, num2, operator);
-                System.out.println(num1);
-            } catch (ExitException e) {
-                System.out.println(e.getMessage());
-                break;
-            }
+            num1 = performCalculation(num1, num2, operator);
+            System.out.println(num1);
+
+            iterations++;
         }
     }
 
