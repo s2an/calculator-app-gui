@@ -32,6 +32,7 @@ public class CalculatorAppConsoleTest {
         }
     }
 
+    // NUMBER INPUT TESTS
     @Test
     public void testValidNumberInput() {
         String simulatedInput = "4\n"; // Simulates entering the number 4 and pressing Enter
@@ -132,6 +133,45 @@ public class CalculatorAppConsoleTest {
     }
 
     @Test
+    public void testClearNumberInput1() {
+        String simulatedInput = "clear\n";
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(simulatedInput.getBytes());
+        System.setIn(inputStream);
+
+        Scanner scanner = new Scanner(System.in);
+
+        try {
+            double result = CalculatorAppConsole.handleNumberInput(scanner);
+            assertTrue(Double.isNaN(result));
+        } finally {
+            System.setIn(System.in);
+        }
+    }
+
+    @Test
+    public void testClearNumberInput2() {
+        String simulatedInput = "4\n+\nclear\n1\n+\n1\n";
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(simulatedInput.getBytes());
+        System.setIn(inputStream);
+
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(outputStream));
+
+        Scanner scanner = new Scanner(System.in);
+
+        try {
+            CalculatorAppConsole.processCalculations(scanner, 1);
+
+            String output = outputStream.toString();
+            assertTrue(output.contains("Results cleared!"));
+        } finally {
+            System.setIn(System.in);
+            System.setOut(System.out);
+        }
+    }
+
+    // OPERATOR INPUT TESTS
+    @Test
     public void testValidOperatorInput() {
         char[] validOperators = {'+', '-', '*', '/'};
 
@@ -173,6 +213,7 @@ public class CalculatorAppConsoleTest {
         }
     }
 
+    // CALCULATION TESTS
     @Test
     public void testCalculation() {
         String simulatedInput = "5\n+\n3\n";
@@ -290,6 +331,7 @@ public class CalculatorAppConsoleTest {
         }
     }
 
+    // EXIT TESTS
     @Test
     public void testExitDuringNumberInput() {
         String simulatedInput = "!!!\n";

@@ -34,9 +34,15 @@ public class CalculatorAppConsole {
         int iterations = 0;
 
         while (iterations < iterationLimit) {
+
             char operator = handleOperatorInput(scanner);
             double num2 = handleNumberInput(scanner);
 
+            if (Double.isNaN(num2)) {
+                num1 = 0;
+                System.out.println("Results cleared!");
+                continue;
+            }
             num1 = performCalculation(num1, num2, operator);
             System.out.println(num1);
 
@@ -55,6 +61,10 @@ public class CalculatorAppConsole {
             String input = scanner.next();
             if (input.equals("!!!")) {
                 throw new ExitException();
+            }
+
+            if (input.equalsIgnoreCase("clear")) {
+                return Double.NaN;
             }
 
             if (input.matches("-?\\d+(\\.\\d+)?")) {
