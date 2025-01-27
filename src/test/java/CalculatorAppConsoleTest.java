@@ -202,6 +202,27 @@ public class CalculatorAppConsoleTest {
     }
 
     @Test
+    public void testNegativeNumberCalculation() {
+        String simulatedInput = "-5\n+\n-3\n";
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(simulatedInput.getBytes());
+        System.setIn(inputStream);
+
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        PrintStream originalOut = System.out;
+        System.setOut(new PrintStream(outputStream));
+
+        try {
+            CalculatorAppConsole.main(new String[]{});
+
+            String output = outputStream.toString().trim();
+            assertTrue(output.contains("-8"));
+        } finally {
+            System.setIn(System.in);
+            System.setOut(originalOut);
+        }
+    }
+
+    @Test
     public void testExitDuringNumberInput() {
         String simulatedInput = "!!!\n";
         ByteArrayInputStream inputStream = new ByteArrayInputStream(simulatedInput.getBytes());
