@@ -41,8 +41,8 @@ public class CalculatorAppConsoleTest {
         Scanner scanner = new Scanner(System.in);
 
         try {
-            int result = CalculatorAppConsole.handleNumberInput(scanner);
-            assertEquals(4, result);
+            double result = CalculatorAppConsole.handleNumberInput(scanner);
+            assertEquals(4.0, result, 0.0001); // The delta is needed to account for a margin of error b/c java stores the numbers as binary approximations!
         } finally {
             System.setIn(System.in);
         }
@@ -61,9 +61,9 @@ public class CalculatorAppConsoleTest {
         Scanner scanner = new Scanner(System.in);
 
         try {
-            int result = CalculatorAppConsole.handleNumberInput(scanner);
+            double result = CalculatorAppConsole.handleNumberInput(scanner);
 
-            assertEquals(1, result);
+            assertEquals(1, result, 0.0001);
             String output = outputStream.toString().trim();
             assertTrue(output.contains("Invalid number."));
         } finally {
@@ -81,9 +81,9 @@ public class CalculatorAppConsoleTest {
         Scanner scanner = new Scanner(System.in);
 
         try {
-            int result = CalculatorAppConsole.handleNumberInput(scanner);
+            double result = CalculatorAppConsole.handleNumberInput(scanner);
 
-            assertEquals(-5, result);
+            assertEquals(-5, result, 0.0001);
         } finally {
             System.setIn(System.in);
         }
@@ -102,15 +102,32 @@ public class CalculatorAppConsoleTest {
         Scanner scanner = new Scanner(System.in);
 
         try {
-            int result = CalculatorAppConsole.handleNumberInput(scanner);
+            double result = CalculatorAppConsole.handleNumberInput(scanner);
 
-            assertEquals(5, result);
+            assertEquals(5, result, 0.0001);
 
             String output = outputStream.toString().trim();
             assertTrue(output.contains("Invalid number."));
         } finally {
             System.setIn(System.in);
             System.setOut(originalOut);
+        }
+    }
+
+    @Test
+    public void testValidFloatingPointNumberInput() {
+        String simulatedInput = "5.75\n";
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(simulatedInput.getBytes());
+        System.setIn(inputStream);
+
+        Scanner scanner = new Scanner(System.in);
+
+        try {
+            double result = CalculatorAppConsole.handleNumberInput(scanner);
+
+            assertEquals(5.75, result, 0.0001);
+        } finally {
+            System.setIn(System.in);
         }
     }
 
@@ -126,10 +143,8 @@ public class CalculatorAppConsoleTest {
             Scanner scanner = new Scanner(System.in);
 
             char result = CalculatorAppConsole.handleOperatorInput(scanner);
-
             assertTrue(result == '+' || result == '-' || result == '*' || result == '/');
 
-            // Cleanup: Restore System.in
             System.setIn(System.in);
         }
     }
@@ -216,6 +231,27 @@ public class CalculatorAppConsoleTest {
 
             String output = outputStream.toString().trim();
             assertTrue(output.contains("-8"));
+        } finally {
+            System.setIn(System.in);
+            System.setOut(originalOut);
+        }
+    }
+
+    @Test
+    public void testFloatingPointCalculation() {
+        String simulatedInput = "5.5\n+\n3.25\n";
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(simulatedInput.getBytes());
+        System.setIn(inputStream);
+
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        PrintStream originalOut = System.out;
+        System.setOut(new PrintStream(outputStream));
+
+        try {
+            CalculatorAppConsole.main(new String[]{});
+
+            String output = outputStream.toString().trim();
+            assertTrue(output.contains("8.75"));
         } finally {
             System.setIn(System.in);
             System.setOut(originalOut);
