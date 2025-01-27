@@ -73,6 +73,48 @@ public class CalculatorAppConsoleTest {
     }
 
     @Test
+    public void testValidNegativeNumberInput() {
+        String simulatedInput = "-5\n";
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(simulatedInput.getBytes());
+        System.setIn(inputStream);
+
+        Scanner scanner = new Scanner(System.in);
+
+        try {
+            int result = CalculatorAppConsole.handleNumberInput(scanner);
+
+            assertEquals(-5, result);
+        } finally {
+            System.setIn(System.in);
+        }
+    }
+
+    @Test
+    public void testInvalidNegativeNumberInput() {
+        String simulatedInput = "-a\n5\n"; // Invaild input, then valid input
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(simulatedInput.getBytes());
+        System.setIn(inputStream);
+
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        PrintStream originalOut = System.out;
+        System.setOut(new PrintStream(outputStream));
+
+        Scanner scanner = new Scanner(System.in);
+
+        try {
+            int result = CalculatorAppConsole.handleNumberInput(scanner);
+
+            assertEquals(5, result);
+
+            String output = outputStream.toString().trim();
+            assertTrue(output.contains("Invalid number."));
+        } finally {
+            System.setIn(System.in);
+            System.setOut(originalOut);
+        }
+    }
+
+    @Test
     public void testValidOperatorInput() {
         char[] validOperators = {'+', '-', '*', '/'};
 
@@ -153,6 +195,27 @@ public class CalculatorAppConsoleTest {
 
         } catch (ArithmeticException e) {
             assertEquals("Cannot divide by zero.", e.getMessage());
+        } finally {
+            System.setIn(System.in);
+            System.setOut(originalOut);
+        }
+    }
+
+    @Test
+    public void testNegativeNumberCalculation() {
+        String simulatedInput = "-5\n+\n-3\n";
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(simulatedInput.getBytes());
+        System.setIn(inputStream);
+
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        PrintStream originalOut = System.out;
+        System.setOut(new PrintStream(outputStream));
+
+        try {
+            CalculatorAppConsole.main(new String[]{});
+
+            String output = outputStream.toString().trim();
+            assertTrue(output.contains("-8"));
         } finally {
             System.setIn(System.in);
             System.setOut(originalOut);
