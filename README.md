@@ -1,6 +1,6 @@
-# CalculatorAppConsole
+# CalculatorAppGUI
 
-A simple console-based calculator program written in Java.
+A simple GUI calculator program written in Java.
 This calculator supports basic arithmetic operations (`+`, `-`, `*`, `/`), clearing results, and exiting gracefully.
 
 ## Features
@@ -10,18 +10,6 @@ This calculator supports basic arithmetic operations (`+`, `-`, `*`, `/`), clear
 
 ## Installation
 
-1. **Download the JAR file**:
-   Download the `CalculatorAppConsole.jar` file:
-   ```bash
-   git clone <repository-url>
-   cd CalculatorAppConsole
-   ```
-
-2. **Run the JAR**:
-   Use the following command to run the program:
-   ```bash
-   java -jar CalculatorAppConsole.jar
-   ```
 
 ## Usage
 

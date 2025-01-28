@@ -1,6 +1,6 @@
 import java.util.Scanner;
 
-public class CalculatorAppConsole {
+public class CalculatorAppGUI {
     public static void main(String[] args) {
         try {
             runCalculator();
