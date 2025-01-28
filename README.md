@@ -4,5 +4,5 @@ Future features to implement include
 
 ~~- The ability to handle negative numbers~~
 ~~- The ability to handle floating-point numbers~~
-- The ability to do more than one calculation
+~~- The ability to do more than one calculation~~
 - Package into a JAR

@@ -21,11 +21,39 @@ public class CalculatorAppConsole {
 
         Scanner scanner = new Scanner(System.in);
 
+        try {
+            processCalculations(scanner, 256000);
+        } catch (ExitException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public static void processCalculations(Scanner scanner, int iterationLimit) {
         double num1 = handleNumberInput(scanner);
-        char operator = handleOperatorInput(scanner);
-        double num2 = handleNumberInput(scanner);
-        double result = performCalculation(num1, num2, operator);
-        System.out.println(result);
+        // Need to limit iterations so tests do have an infinite loop
+        int iterations = 0;
+
+        while (iterations < iterationLimit) {
+
+            char operator = handleOperatorInput(scanner);
+            if (operator == 'C') { // Handle "clear"
+                System.out.println("Results cleared!");
+                num1 = handleNumberInput(scanner); // Allow input of a new number
+                continue; // Skip to the next iteration to allow a new number input
+            }
+
+            double num2 = handleNumberInput(scanner);
+            if (Double.isNaN(num2)) {
+                System.out.println("Results cleared!");
+                num1 = handleNumberInput(scanner);
+                continue;
+            }
+
+            num1 = performCalculation(num1, num2, operator);
+            System.out.println(num1);
+
+            iterations++;
+        }
     }
 
     public static void printWelcomeMessage() {
@@ -35,10 +63,16 @@ public class CalculatorAppConsole {
     }
 
     public static double handleNumberInput(Scanner scanner) {
+
         while (true) {
             String input = scanner.next();
+
             if (input.equals("!!!")) {
                 throw new ExitException();
+            }
+
+            if (input.equalsIgnoreCase("clear")) {
+                return Double.NaN;
             }
 
             if (input.matches("-?\\d+(\\.\\d+)?")) {
@@ -57,9 +91,14 @@ public class CalculatorAppConsole {
                 throw new ExitException();
             }
 
+            if (input.equalsIgnoreCase("clear")) {
+                return 'C';
+            }
+
             if (input.equals("+") || input.equals("-") || input.equals("*") || input.equals("/")) {
                 return input.charAt(0);
             }
+
             System.out.println("Invalid operator.");
         }
     }

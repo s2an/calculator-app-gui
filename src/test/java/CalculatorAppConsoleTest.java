@@ -32,6 +32,7 @@ public class CalculatorAppConsoleTest {
         }
     }
 
+    // NUMBER INPUT TESTS
     @Test
     public void testValidNumberInput() {
         String simulatedInput = "4\n"; // Simulates entering the number 4 and pressing Enter
@@ -91,7 +92,7 @@ public class CalculatorAppConsoleTest {
 
     @Test
     public void testInvalidNegativeNumberInput() {
-        String simulatedInput = "-a\n5\n"; // Invaild input, then valid input
+        String simulatedInput = "-a\n5\n"; // Invalid input, then valid input
         ByteArrayInputStream inputStream = new ByteArrayInputStream(simulatedInput.getBytes());
         System.setIn(inputStream);
 
@@ -131,6 +132,48 @@ public class CalculatorAppConsoleTest {
         }
     }
 
+    @Test
+    public void testClearInNumberInput1() {
+        String simulatedInput = "clear\n";
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(simulatedInput.getBytes());
+        System.setIn(inputStream);
+
+        Scanner scanner = new Scanner(System.in);
+
+        try {
+            double result = CalculatorAppConsole.handleNumberInput(scanner);
+            assertTrue(Double.isNaN(result));
+        } finally {
+            System.setIn(System.in);
+        }
+    }
+
+    @Test
+    public void testClearInNumberInput2() {
+        String simulatedInput = "4\n+\nclear\n2\n+\n1000\n";
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(simulatedInput.getBytes());
+        System.setIn(inputStream);
+
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        PrintStream originalOut = System.out;
+        System.setOut(new PrintStream(outputStream));
+
+        Scanner scanner = new Scanner(System.in);
+
+        try {
+            CalculatorAppConsole.processCalculations(scanner, 1);
+
+            String output = outputStream.toString();
+            assertTrue(output.contains("Results cleared!"));
+            assertTrue(output.contains("1002.0"));
+
+        } finally {
+            System.setIn(System.in);
+            System.setOut(originalOut);
+        }
+    }
+
+    // OPERATOR INPUT TESTS
     @Test
     public void testValidOperatorInput() {
         char[] validOperators = {'+', '-', '*', '/'};
@@ -174,6 +217,24 @@ public class CalculatorAppConsoleTest {
     }
 
     @Test
+    public void testClearInOperatorInput() {
+        String simulatedInput = "4\nclear\n";
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(simulatedInput.getBytes());
+        System.setIn(inputStream);
+
+        Scanner scanner = new Scanner(System.in);
+        // Currently passes, but also outputs "Invalid operator"
+        // Tried switching to else if statements, but I think they are the same in java
+        try {
+            char result = CalculatorAppConsole.handleOperatorInput(scanner);
+            assertEquals('C', result);
+        } finally {
+            System.setIn(System.in);
+        }
+    }
+
+    // CALCULATION TESTS
+    @Test
     public void testCalculation() {
         String simulatedInput = "5\n+\n3\n";
         ByteArrayInputStream inputStream = new ByteArrayInputStream(simulatedInput.getBytes());
@@ -183,8 +244,10 @@ public class CalculatorAppConsoleTest {
         PrintStream originalOut = System.out;
         System.setOut(new PrintStream(outputStream));
 
+        Scanner scanner = new Scanner(System.in);
+
         try {
-            CalculatorAppConsole.main(new String[]{});
+            CalculatorAppConsole.processCalculations(scanner, 1);
 
             String output = outputStream.toString().trim();
             assertTrue(output.contains("8"));
@@ -218,7 +281,7 @@ public class CalculatorAppConsoleTest {
 
     @Test
     public void testNegativeNumberCalculation() {
-        String simulatedInput = "-5\n+\n-3\n";
+        String simulatedInput = "-5\n+\n-3\n"; // -5 + -3
         ByteArrayInputStream inputStream = new ByteArrayInputStream(simulatedInput.getBytes());
         System.setIn(inputStream);
 
@@ -226,8 +289,12 @@ public class CalculatorAppConsoleTest {
         PrintStream originalOut = System.out;
         System.setOut(new PrintStream(outputStream));
 
+        // Needed to use the Scanner
+        Scanner scanner = new Scanner(System.in);
+
         try {
-            CalculatorAppConsole.main(new String[]{});
+            // Switched away from .main
+            CalculatorAppConsole.processCalculations(scanner, 1);
 
             String output = outputStream.toString().trim();
             assertTrue(output.contains("-8"));
@@ -247,8 +314,10 @@ public class CalculatorAppConsoleTest {
         PrintStream originalOut = System.out;
         System.setOut(new PrintStream(outputStream));
 
+        Scanner scanner = new Scanner(System.in);
+
         try {
-            CalculatorAppConsole.main(new String[]{});
+            CalculatorAppConsole.processCalculations(scanner, 1);
 
             String output = outputStream.toString().trim();
             assertTrue(output.contains("8.75"));
@@ -258,6 +327,56 @@ public class CalculatorAppConsoleTest {
         }
     }
 
+    @Test
+    public void testMultipleCalculations() {
+        String simulatedInput = "5\n+\n3\n-\n7\n";
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(simulatedInput.getBytes());
+        System.setIn(inputStream);
+
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        PrintStream originalOut = System.out;
+        System.setOut(new PrintStream(outputStream));
+
+        Scanner scanner = new Scanner(System.in);
+
+        try {
+            CalculatorAppConsole.processCalculations(scanner, 2);
+
+            String output = outputStream.toString().trim();
+            assertTrue(output.contains("1"));
+
+        } finally {
+            System.setIn(System.in);
+            System.setOut(originalOut);
+        }
+    }
+
+    @Test
+    public void testClearInCalculations() {
+        String simulatedInput = "4\n+\nclear\n2\n+\n1000\n";
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(simulatedInput.getBytes());
+        System.setIn(inputStream);
+
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        PrintStream originalOut = System.out;
+        System.setOut(new PrintStream(outputStream));
+
+        Scanner scanner = new Scanner(System.in);
+
+        try {
+            CalculatorAppConsole.processCalculations(scanner, 1);
+
+            String output = outputStream.toString();
+
+            assertTrue(output.contains("Results cleared!"));
+            assertTrue(output.contains("1002.0"));
+        } finally {
+            System.setIn(System.in);
+            System.setOut(originalOut);
+        }
+    }
+
+    // EXIT TESTS
     @Test
     public void testExitDuringNumberInput() {
         String simulatedInput = "!!!\n";
