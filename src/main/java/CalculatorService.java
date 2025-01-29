@@ -1,6 +1,6 @@
 import java.util.Scanner;
 
-public class CalculatorAppGUI {
+public class CalculatorService {
     public static void main(String[] args) {
         try {
             runCalculator();

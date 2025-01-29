@@ -8,7 +8,7 @@ import java.util.Scanner;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class CalculatorAppGUITest {
+public class CalculatorServiceTest {
 
     @Test
     void testWelcomeMessage() {
@@ -17,7 +17,7 @@ public class CalculatorAppGUITest {
         System.setOut(new PrintStream(outputStream));
 
         try {
-            CalculatorAppGUI.printWelcomeMessage();
+            CalculatorService.printWelcomeMessage();
             String output = outputStream.toString().trim();
             assertTrue(output.contains("Welcome to the Calculator App!"));
             assertTrue(output.contains("Available operations: +, -, *, /"));
@@ -37,7 +37,7 @@ public class CalculatorAppGUITest {
         Scanner scanner = new Scanner(System.in);
 
         try {
-            double result = CalculatorAppGUI.handleNumberInput(scanner);
+            double result = CalculatorService.handleNumberInput(scanner);
             assertEquals(4.0, result, 0.0001);
         } finally {
             System.setIn(System.in);
@@ -57,7 +57,7 @@ public class CalculatorAppGUITest {
         Scanner scanner = new Scanner(System.in);
 
         try {
-            double result = CalculatorAppGUI.handleNumberInput(scanner);
+            double result = CalculatorService.handleNumberInput(scanner);
 
             assertEquals(1, result, 0.0001);
             String output = outputStream.toString().trim();
@@ -77,7 +77,7 @@ public class CalculatorAppGUITest {
         Scanner scanner = new Scanner(System.in);
 
         try {
-            double result = CalculatorAppGUI.handleNumberInput(scanner);
+            double result = CalculatorService.handleNumberInput(scanner);
 
             assertEquals(-5, result, 0.0001);
         } finally {
@@ -98,7 +98,7 @@ public class CalculatorAppGUITest {
         Scanner scanner = new Scanner(System.in);
 
         try {
-            double result = CalculatorAppGUI.handleNumberInput(scanner);
+            double result = CalculatorService.handleNumberInput(scanner);
 
             assertEquals(5, result, 0.0001);
 
@@ -119,7 +119,7 @@ public class CalculatorAppGUITest {
         Scanner scanner = new Scanner(System.in);
 
         try {
-            double result = CalculatorAppGUI.handleNumberInput(scanner);
+            double result = CalculatorService.handleNumberInput(scanner);
 
             assertEquals(5.75, result, 0.0001);
         } finally {
@@ -136,7 +136,7 @@ public class CalculatorAppGUITest {
         Scanner scanner = new Scanner(System.in);
 
         try {
-            double result = CalculatorAppGUI.handleNumberInput(scanner);
+            double result = CalculatorService.handleNumberInput(scanner);
             assertTrue(Double.isNaN(result));
         } finally {
             System.setIn(System.in);
@@ -156,7 +156,7 @@ public class CalculatorAppGUITest {
         Scanner scanner = new Scanner(System.in);
 
         try {
-            CalculatorAppGUI.processCalculations(scanner, 1);
+            CalculatorService.processCalculations(scanner, 1);
 
             String output = outputStream.toString();
             assertTrue(output.contains("Results cleared!"));
@@ -180,7 +180,7 @@ public class CalculatorAppGUITest {
 
             Scanner scanner = new Scanner(System.in);
 
-            char result = CalculatorAppGUI.handleOperatorInput(scanner);
+            char result = CalculatorService.handleOperatorInput(scanner);
             assertTrue(result == '+' || result == '-' || result == '*' || result == '/');
 
             System.setIn(System.in);
@@ -200,7 +200,7 @@ public class CalculatorAppGUITest {
         Scanner scanner = new Scanner(System.in);
 
         try {
-            char result = CalculatorAppGUI.handleOperatorInput(scanner);
+            char result = CalculatorService.handleOperatorInput(scanner);
 
             assertEquals('+', result);
             String output = outputStream.toString().trim();
@@ -221,7 +221,7 @@ public class CalculatorAppGUITest {
         // Currently passes, but also outputs "Invalid operator"
         // Tried switching to else if statements, but I think they are the same in java
         try {
-            char result = CalculatorAppGUI.handleOperatorInput(scanner);
+            char result = CalculatorService.handleOperatorInput(scanner);
             assertEquals('C', result);
         } finally {
             System.setIn(System.in);
@@ -242,7 +242,7 @@ public class CalculatorAppGUITest {
         Scanner scanner = new Scanner(System.in);
 
         try {
-            CalculatorAppGUI.processCalculations(scanner, 1);
+            CalculatorService.processCalculations(scanner, 1);
 
             String output = outputStream.toString().trim();
             assertTrue(output.contains("8"));
@@ -263,7 +263,7 @@ public class CalculatorAppGUITest {
         System.setOut(new PrintStream(outputStream));
 
         try {
-            CalculatorAppGUI.main(new String[]{});
+            CalculatorService.main(new String[]{});
             fail("Expected ArithmeticException was not thrown.");
 
         } catch (ArithmeticException e) {
@@ -287,7 +287,7 @@ public class CalculatorAppGUITest {
         Scanner scanner = new Scanner(System.in);
 
         try {
-            CalculatorAppGUI.processCalculations(scanner, 1);
+            CalculatorService.processCalculations(scanner, 1);
 
             String output = outputStream.toString().trim();
             assertTrue(output.contains("-8"));
@@ -310,7 +310,7 @@ public class CalculatorAppGUITest {
         Scanner scanner = new Scanner(System.in);
 
         try {
-            CalculatorAppGUI.processCalculations(scanner, 1);
+            CalculatorService.processCalculations(scanner, 1);
 
             String output = outputStream.toString().trim();
             assertTrue(output.contains("8.75"));
@@ -333,7 +333,7 @@ public class CalculatorAppGUITest {
         Scanner scanner = new Scanner(System.in);
 
         try {
-            CalculatorAppGUI.processCalculations(scanner, 2);
+            CalculatorService.processCalculations(scanner, 2);
 
             String output = outputStream.toString().trim();
             assertTrue(output.contains("1"));
@@ -357,7 +357,7 @@ public class CalculatorAppGUITest {
         Scanner scanner = new Scanner(System.in);
 
         try {
-            CalculatorAppGUI.processCalculations(scanner, 1);
+            CalculatorService.processCalculations(scanner, 1);
 
             String output = outputStream.toString();
 
@@ -377,9 +377,9 @@ public class CalculatorAppGUITest {
         System.setIn(inputStream);
 
         try {
-            CalculatorAppGUI.handleNumberInput(new Scanner(System.in));
+            CalculatorService.handleNumberInput(new Scanner(System.in));
             fail("ExitException was not thrown.");
-        } catch (CalculatorAppGUI.ExitException e) {
+        } catch (CalculatorService.ExitException e) {
             assertEquals("User chose to exit the program.", e.getMessage());
         }
     }
@@ -391,9 +391,9 @@ public class CalculatorAppGUITest {
         System.setIn(inputStream);
 
         try {
-            CalculatorAppGUI.handleOperatorInput(new Scanner(System.in));
+            CalculatorService.handleOperatorInput(new Scanner(System.in));
             fail("ExitException was not thrown.");
-        } catch (CalculatorAppGUI.ExitException e) {
+        } catch (CalculatorService.ExitException e) {
             assertEquals("User chose to exit the program.", e.getMessage());
         }
     }

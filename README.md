@@ -1,4 +1,4 @@
-# CalculatorAppGUI
+# CalculatorService
 
 A simple GUI calculator program written in Java.
 This calculator supports basic arithmetic operations (`+`, `-`, `*`, `/`), clearing results, and exiting gracefully.
