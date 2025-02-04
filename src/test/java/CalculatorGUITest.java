@@ -1,47 +1,63 @@
-import static org.junit.jupiter.api.Assertions.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.testfx.framework.junit5.ApplicationTest;
-import javafx.stage.Stage;
-import javafx.scene.control.TextField;
-import javafx.scene.control.Label;
-import javafx.scene.control.Button;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class CalculatorGUITest extends ApplicationTest {
-    private TextField num1, num2;
-    private Label resultLabel;
-    private Button addButton;
+    private CalculatorGUI calculatorGUI;
+    private TextField inputField;
+    private Button addButton, subtractButton, multiplyButton, divideButton, clearButton, enterButton;
 
     @Override
     public void start(Stage stage) {
-        CalculatorGUI app = new CalculatorGUI();
-        app.start(stage);
+        calculatorGUI = new CalculatorGUI();
+        calculatorGUI.start(stage);
+        inputField = lookup(".text-field").query();
+        addButton = lookup(".button").match((b) -> ((Button) b).getText().equals("+")).query();
+        subtractButton = lookup(".button").match((b) -> ((Button) b).getText().equals("-")).query();
+        multiplyButton = lookup(".button").match((b) -> ((Button) b).getText().equals("*")).query();
+        divideButton = lookup(".button").match((b) -> ((Button) b).getText().equals("/")).query();
+        clearButton = lookup(".button").match((b) -> ((Button) b).getText().equals("C")).query();
+        enterButton = lookup(".button").match((b) -> ((Button) b).getText().equals("Enter")).query();
+    }
 
-        num1 = lookup(".text-field").nth(0).query();
-        num2 = lookup(".text-field").nth(1).query();
-        resultLabel = lookup(".label").query();
-        addButton = lookup(".button").query();
+    @BeforeEach
+    void setUp() {
+        inputField.clear();
     }
 
     @Test
-    void testAdditionInGUI() {
-        interact(() -> {
-            num1.setText("5");
-            num2.setText("3");
-        });
-
-        clickOn(addButton);
-        assertEquals("Result: 8.0", resultLabel.getText());
+    void testValidNumberInput() {
+        clickOn(inputField).write("5");
+        clickOn(enterButton);
+        assertEquals("", inputField.getText(), "Input field should be cleared after entering a number.");
     }
 
     @Test
-    void testInvalidInput() {
-        interact(() -> {
-            num1.setText("abc");
-            num2.setText("3");
-        });
+    void testInvalidNumberInput() {
+        clickOn(inputField).write("abc");
+        clickOn(enterButton);
+        assertEquals("abc", inputField.getText(), "Input field should not accept invalid numbers.");
+    }
 
+    @Test
+    void testOperatorSelection() {
+        clickOn(inputField).write("5");
+        clickOn(enterButton);
         clickOn(addButton);
-        assertEquals("Invalid input.", resultLabel.getText());
+        assertEquals("+", inputField.getText(), "Operator should be displayed in the input field.");
+    }
+
+    @Test
+    void testClearFunctionality() {
+        clickOn(inputField).write("5");
+        clickOn(enterButton);
+        clickOn(clearButton);
+        assertEquals("", inputField.getText(), "Input field should be cleared after clicking 'C'.");
     }
 }
-
